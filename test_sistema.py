@@ -70,6 +70,7 @@ class TestClass:
         cliente_nuevo.credita_cuenta(monto=20000)
         assert cliente_nuevo.muestra_saldo() > saldo_antiguo
 
+    # Falla
     def test_incrementa_instrumento(self):
         data = {495: {"saldo": 120000}}
         api_transacciones = Api_Transacciones()

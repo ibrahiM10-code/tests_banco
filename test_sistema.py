@@ -3,6 +3,7 @@ from Control.Clientes import *
 from Control.InterfaceBanco import Api_Mantenimiento, Api_Transacciones
 from Entity.DaoBaseDatos import Dao_Nosql
 from Entity.BaseDatos import Gestor_BD
+from Boundary.MenuSistema import convertir_datos
 import pytest
 
 class TestClass:
@@ -75,3 +76,20 @@ class TestClass:
         api_transacciones = Api_Transacciones()
         (res, data2) = api_transacciones.incrementa_instrumento(data=self.data_monto)
         assert (res, data2) == (True, data)
+
+    def test_recuperar_bd(self):
+        gestor = Gestor_BD()
+        assert gestor.recuperar_BD(123) != {}
+
+    # Pruebas de la cuarta evaluacion.
+    # Test si los objetos DAO si son singlenton.
+    def test_is_singlenton(self):
+        dao1 = Dao_Nosql(Gestor_BD())
+        dao2 = Dao_Nosql(Gestor_BD())
+        assert dao1 == dao2
+
+    # Test si la funcion convertir datos funciona correctamente.
+    @pytest.mark.parametrize("dict_data, validadores", [({"nombre": "Julio", "year": "2000"}, ["l", "n"]), ({"nombre": "Mario", "year": "2009"}, ["l", "n"]), ({"nombre": "Ibrahim", "edad": "20", "carrera": "Informática"}, ["l", "n", "l"])])
+    def test_convertir_datos(self, dict_data, validadores):
+        new_data = convertir_datos(dict_data, validadores)
+        assert dict_data != new_data
